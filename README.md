@@ -143,3 +143,73 @@ kubectl get ingress
 ```bash
 curl --resolve "<ingress-host>:80:<ingress-address>" -i http://<ingress-host>/
 ```
+
+### Step 6 - Create an ingress with TLS
+
+1. Create a TLS secret
+
+```bash
+openssl genpkey -algorithm RSA -out tls.key
+
+openssl req -new -key tls.key -out tls.csr -subj "/CN=k8s-microproject.com"
+
+openssl x509 -req -in tls.csr -signkey tls.key -out tls.crt -days 365
+
+```bash
+kubectl get svc -n ingress-nginx
+kubectl create secret tls k8s-microproject-tls --cert=tls.crt --key=tls.key
+
+curl --resolve "k8s-microproject.com:<ingress-address> -i https://k8s-microproject.com
+```
+
+### Step 7 - Create a persistent volume
+
+1. Create a persistent volume
+
+```bash
+kubectl apply -f persistent-volume.yaml
+```
+
+2. Create a persistent volume claim
+
+```bash
+kubectl apply -f persistent-volume-claim.yaml
+```
+
+3. Check that your persistent volume is operational
+
+```bash
+kubectl get pv
+kubectl get pvc
+kubectl describe pod <nom-du-pod>
+```
+
+### Step 8 - Create a configmap
+
+1. Create a configmap
+
+```bash
+kubectl apply -f configmap.yaml
+```
+
+2. Check that your configmap is operational
+
+```bash
+kubectl get configmap
+kubectl describe configmap <nom-du-configmap>
+```
+
+### Step 9 - Create a statefulset
+
+1. Create a statefulset
+
+```bash
+kubectl apply -f statefulset.yaml
+```
+
+2. Check that your statefulset is operational
+
+```bash
+kubectl get statefulset
+kubectl describe statefulset <nom-du-statefulset>
+```
