@@ -2,7 +2,13 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: k8s-microproject-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
 spec:
+  tls:
+  - hosts:
+    - k8s-microproject.com
+    secretName: k8s-microproject-tls
   rules:
   - host: k8s-microproject.com
     http:
